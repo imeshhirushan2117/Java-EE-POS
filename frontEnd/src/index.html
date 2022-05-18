@@ -12,20 +12,22 @@
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container-fluid">
             <a class="navbar-brand" href="index.html">
-                <img src="assets/img/food.jpg" width="100" height="100" alt="Logo"></a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <img alt="Logo" height="100" src="assets/img/food.jpg" width="100"></a>
+            <button aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"
+                    class="navbar-toggler" data-bs-target="#navbarSupportedContent"
+                    data-bs-toggle="collapse" type="button">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     <li class="nav-item">
-                        <a id="clickCustomer" class="nav-link" aria-current="page">Customer</a>
+                        <a aria-current="page" class="nav-link" id="clickCustomer">Customer</a>
                     </li>
                     <li class="nav-item">
-                        <a id="clickItem" class="nav-link active">Item</a>
+                        <a class="nav-link active" id="clickItem">Item</a>
                     </li>
                     <li class="nav-item">
-                        <a id="clickOrder" class="nav-link">Order</a>
+                        <a class="nav-link" id="clickOrder">Order</a>
                     </li>
                 </ul>
             </div>
@@ -35,7 +37,7 @@
 <main class="container">
 
     <!--item-->
-    <section id="item" class="container-fluid">
+    <section class="container-fluid" id="item">
         <div class="rounded-3 p-3" style="background-color: green; margin-top: 30px;">
             <h1 class="text-center mb-3"><i class="bi bi-box-seam"></i>Item Form</h1>
         </div>
@@ -43,7 +45,8 @@
         <div class="row g-3 align-items-center pb-3 justify-content-between">
             <div class="col-12 col-md-6 col-xl-6">
                 <div class="input-group mb-3" style="margin-top: 30px;">
-                    <input aria-describedby="button-addon1" aria-label="Example text with button addon" class="form-control"
+                    <input aria-describedby="button-addon1" aria-label="Example text with button addon"
+                           class="form-control"
                            id="txtItemSearch" placeholder="Search Item" type="text">
                     <button class="btn btn-success" id="btnItemSearch" type="button">
                         <i class="bi bi-search m-2"> </i>Search
@@ -83,7 +86,7 @@
             <div class="row align-items-center pt-3 ">
                 <div class="col-12 mt-2">
                     <div class="table-responsive" style="height: 70vh">
-                        <table id="tblItem" class="table table-success table-striped">
+                        <table class="table table-success table-striped" id="tblItem">
                             <thead>
                             <tr>
                                 <th scope="col">Item ID</th>
@@ -110,7 +113,8 @@
         <div class="row g-3 align-items-center pb-3 justify-content-between">
             <div class="col-12 col-md-6 col-xl-6">
                 <div class="input-group mb-3" style="margin-top: 30px;">
-                    <input aria-describedby="button-addon1" aria-label="Example text with button addon" class="form-control"
+                    <input aria-describedby="button-addon1" aria-label="Example text with button addon"
+                           class="form-control"
                            id="txtCustomerSearch" placeholder="Search Customer" type="text">
                     <button class="btn btn-success" id="btnCustomerSearch" type="button">
                         <i class="bi bi-search m-2"> </i>Search
@@ -118,10 +122,12 @@
                 </div>
             </div>
             <div class="col-12 col-md-5 col-lg-4 col-xl-6">
-                <button class="btn btn-danger" id="btnCustomerDelete" style="margin-bottom: -10px" type="button">Delete <i
-                        class="bi bi-trash"></i></button>
-                <button class="btn btn-warning" id="btnCustomerClear" style="margin-bottom: -10px" type="button">Clear <i
-                        class="bi bi-backspace m-2"></i></button>
+                <button class="btn btn-danger" id="btnCustomerDelete" style="margin-bottom: -10px" type="button">Delete
+                    <i
+                            class="bi bi-trash"></i></button>
+                <button class="btn btn-warning" id="btnCustomerClear" style="margin-bottom: -10px" type="button">Clear
+                    <i
+                            class="bi bi-backspace m-2"></i></button>
                 <button class="btn btn-success" id="btnCustomerAdd" style="margin-bottom: -10px" type="button">Add <i
                         class="bi bi-person-plus-fill m-2"></i></button>
                 <button class="btn btn-info" id="btnCustomerUpdate" style="margin-bottom: -10px" type="button">Update <i
@@ -129,27 +135,29 @@
 
             </div>
             <div class="row">
-                <div class="mb-3 col-6">
-                    <label class="form-label" for="txtCusID">Customer ID</label>
-                    <input class="form-control" id="txtCusID" placeholder="Customer ID" type="text">
-                </div>
-                <div class="mb-3 col-6">
-                    <label class="form-label" for="txtCusName">Customer Name</label>
-                    <input class="form-control" id="txtCusName" placeholder="Customer Name" type="text">
-                </div>
-                <div class="mb-3 col-6">
-                    <label class="form-label" for="txtCusAddress">Customer Address</label>
-                    <input class="form-control" id="txtCusAddress" placeholder="Customer Address" type="text">
-                </div>
-                <div class="mb-3 col-6">
-                    <label class="form-label" for="txtCusTP">Customer Salary</label>
-                    <input class="form-control" id="txtCusTP" placeholder="Customer Salary" type="text">
-                </div>
+                <form id="customerForm">
+                    <div class="mb-3 col-6">
+                        <label class="form-label" for="txtCusID">Customer ID</label>
+                        <input class="form-control" id="txtCusID" placeholder="Customer ID" type="text" name="cusID">
+                    </div>
+                    <div class="mb-3 col-6">
+                        <label class="form-label" for="txtCusName">Customer Name</label>
+                        <input class="form-control" id="txtCusName" placeholder="Customer Name" type="text" name="cusName">
+                    </div>
+                    <div class="mb-3 col-6">
+                        <label class="form-label" for="txtCusAddress">Customer Address</label>
+                        <input class="form-control" id="txtCusAddress" placeholder="Customer Address" type="text" name="cusAddressA">
+                    </div>
+                    <div class="mb-3 col-6">
+                        <label class="form-label" for="txtCusTP">Customer Salary</label>
+                        <input class="form-control" id="txtCusTP" placeholder="Customer Salary" type="text" name="cusSalary">
+                    </div>
+                </form>
             </div>
             <div class="row align-items-center pt-3 ">
                 <div class="col-12 mt-2">
                     <div class="table-responsive" style="height: 70vh">
-                        <table id="tblCustomer" class="table table-success table-striped">
+                        <table class="table table-success table-striped" id="tblCustomer">
                             <thead>
                             <tr>
                                 <th scope="col">Customer ID</th>
@@ -211,7 +219,8 @@
                                 </div>-->
                                 <div class="col">
                                     <label class="form-label fw-bold" for="tepNumber">Customer Salary:</label>
-                                    <input class="form-control" id="tepNumber" placeholder="Customer Salary" type="text">
+                                    <input class="form-control" id="tepNumber" placeholder="Customer Salary"
+                                           type="text">
                                 </div>
                                 <!--==================-->
                                 <div class="col">
@@ -261,7 +270,9 @@
                                 </div>
                             </div>
                             <div class="row mt-3 mb-1">
-                                <button class="btn btn-primary" type="button" style="background-color: #4AC29A" >Add Item</button>
+                                <button class="btn btn-primary" style="background-color: #4AC29A" type="button">Add
+                                    Item
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -278,7 +289,7 @@
                                         Total :
                                     </p>
                                     <p class="h2 d-inline">
-                                       <!-- 2000 LKR-->
+                                        <!-- 2000 LKR-->
                                     </p>
                                 </div>
                             </div>
@@ -341,7 +352,7 @@
 </main>
 <script src="assets/jquery/jquery-3.6.0.min.js"></script>
 <script src="assets/js/javaScript.js"></script>
-<script  src="db/DB.js"> </script>
+<script src="db/DB.js"></script>
 <script src="contraller/customerController.js"></script>
 <script src="contraller/itemController.js"></script>
 <script src="contraller/orderContraller.js"></script>

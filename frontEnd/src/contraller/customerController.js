@@ -3,7 +3,29 @@ generateCusId();
 addCustomerData();
 /*customerAdd*/
 $("#btnCustomerAdd").click(function () {
-    let customerId = $("#txtCusID").val();
+    $.ajax({
+        url:"http://localhost:8080/backEnd/customer",
+        method: "POST",
+        data:$("#customerForm").serialize(),
+        success:function (resp){
+            if(resp.status==200){
+                addCustomerData();
+               /* clearFileld();
+                addCustomerData();
+                generateCusId();*/
+            }else{
+                alert(resp.data)
+            }
+        },
+        error:function (ob,textStatus,error){
+            console.log("ob");
+            console.log("textStatus");
+            console.log("error");
+        }
+    });
+
+
+   /* let customerId = $("#txtCusID").val();
     let customerName = $("#txtCusName").val();
     let customerAddress = $("#txtCusAddress").val();
     let customerTelNumber = $("#txtCusTP").val();
@@ -15,7 +37,7 @@ $("#btnCustomerAdd").click(function () {
     clearFileld();
     addCustomerData();
     generateCusId();
-    loadAllCustomerIds();
+    loadAllCustomerIds();*/
 });
 
 function bindCustomerRow(){
