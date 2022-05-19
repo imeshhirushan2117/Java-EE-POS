@@ -2,7 +2,7 @@
 generateCusId();
 addCustomerData();
 clearFileld();
-cusDelete();
+/*cusDelete();*/
 /*customerAdd*/
 $("#btnCustomerAdd").click(function () {
     $.ajax({
@@ -68,7 +68,7 @@ function addCustomerData() {
                 let raw = `<tr><td>${customer.id}</td><td>${customer.name}</td><td>${customer.address}</td><td>${customer.salary}</td></tr>`
                 $("#tblCustomer").append(raw);
                 bindCustomerRow();
-                cusDelete();
+               /* cusDelete();*/
             }
         }
     });
@@ -130,25 +130,26 @@ function serchCustomer(id) {
     }
 }
 
+$("#btnCustomerDelete").click(function () {
+    cusDelete() ;
+});
 /*customer delete*/
-function cusDelete() {
-    $("#btnCustomerDelete").click(function () {
-        $("btnCustomerDelete").click(function (){
-           let getClickData=$("#id").val();
-           $.ajax({
-               url:`http://localhost:8080/backEnd/customer?txtCusID=${getClickData}`,
-               method:"DELETE",
-               success:function (resp){
-                   if (resp.status==200){
-                       addCustomerData();
-                   }else {
-                       alert(resp.data);
-                   }
-               }
-           })
-        });
+function cusDelete(){
 
-       /* let customerId = $("#txtCusID").val();
+    let getClickData = $("#txtCusID").val();
+    $.ajax({
+        url: `http://localhost:8080/backEnd/customer?txtCusID=${getClickData}`,
+        method: "DELETE",
+        success: function (resp) {
+            if (resp.status == 200) {
+                addCustomerData();
+                clearFileld();
+            } else {
+                alert(resp.data);
+            }
+        }
+    });
+    /* let customerId = $("#txtCusID").val();
         for (let i = 0; i < customerDB.length; i++) {
             if (customerDB[i].getCustomerID() == customerId) {
                 customerDB.splice(i, 1);
@@ -157,7 +158,6 @@ function cusDelete() {
         addCustomerData();
         clearFileld();
         generateCusId();*/
-    });
 }
 
 /*customer Update*/
@@ -180,20 +180,20 @@ $("#btnCustomerUpdate").click(function () {
             }
         }
     })
-  /*  let customerId = $("#txtCusID").val();
-    let customerName = $("#txtCusName").val();
-    let customerAddress = $("#txtCusAddress").val();
-    let customerTelNumber = $("#txtCusTP").val();
+    /*  let customerId = $("#txtCusID").val();
+      let customerName = $("#txtCusName").val();
+      let customerAddress = $("#txtCusAddress").val();
+      let customerTelNumber = $("#txtCusTP").val();
 
-    for (var i = 0; i < customerDB.length; i++) {
-        if (customerDB[i].getCustomerID() == customerId) {
-            customerDB[i].setCustomerName(customerName);
-            customerDB[i].setCustomerAddress(customerAddress);
-            customerDB[i].setCustomerTelNumber(customerTelNumber);
-        }
-    }
-    addCustomerData();
-    generateCusId();*/
+      for (var i = 0; i < customerDB.length; i++) {
+          if (customerDB[i].getCustomerID() == customerId) {
+              customerDB[i].setCustomerName(customerName);
+              customerDB[i].setCustomerAddress(customerAddress);
+              customerDB[i].setCustomerTelNumber(customerTelNumber);
+          }
+      }
+      addCustomerData();
+      generateCusId();*/
 });
 
 /*Customer ID auto generate*/
@@ -201,10 +201,10 @@ function generateCusId() {
     $.ajax({
         url: "http://localhost:8080/backEnd/customer?option=GenId",
         method: "GET",
-        success: function (resp){
-            if (resp.status==200){
+        success: function (resp) {
+            if (resp.status == 200) {
                 $("#txtCusID").val(resp.data.id);
-            }else{
+            } else {
                 alert(resp.data)
             }
         }

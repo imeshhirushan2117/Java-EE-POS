@@ -139,7 +139,7 @@ public class CustomerServlet extends HttpServlet {
     @Override
     protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         resp.setContentType("application/json");
-        String cusID = req.getParameter("cusID");
+        String cusID = req.getParameter("txtCusID");
         JsonObjectBuilder dataMsgBuilder = Json.createObjectBuilder();
         PrintWriter writer = resp.getWriter();
 
@@ -155,7 +155,7 @@ public class CustomerServlet extends HttpServlet {
                 dataMsgBuilder.add("data","");
                 dataMsgBuilder.add("massage","Customer Deleted");
                 dataMsgBuilder.add("status","200");
-                writer.print(dataMsgBuilder);
+                writer.print(dataMsgBuilder.build());
             }
         } catch (SQLException throwables) {
             dataMsgBuilder.add("status",400);
