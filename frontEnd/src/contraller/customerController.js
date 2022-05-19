@@ -1,6 +1,8 @@
 /*===============Customer party===============*/
 generateCusId();
 addCustomerData();
+clearFileld();
+cusDelete();
 /*customerAdd*/
 $("#btnCustomerAdd").click(function () {
     $.ajax({
@@ -11,6 +13,7 @@ $("#btnCustomerAdd").click(function () {
             if (resp.status == 200) {
                 addCustomerData();
                 generateCusId();
+                clearFileld();
                 /* clearFileld();
                  addCustomerData();
                  generateCusId();*/
@@ -130,7 +133,22 @@ function serchCustomer(id) {
 /*customer delete*/
 function cusDelete() {
     $("#btnCustomerDelete").click(function () {
-        let customerId = $("#txtCusID").val();
+        $("btnCustomerDelete").click(function (){
+           let getClickData=$("#id").val();
+           $.ajax({
+               url:`http://localhost:8080/backEnd/customer?txtCusID=${getClickData}`,
+               method:"DELETE",
+               success:function (resp){
+                   if (resp.status==200){
+                       addCustomerData();
+                   }else {
+                       alert(resp.data);
+                   }
+               }
+           })
+        });
+
+       /* let customerId = $("#txtCusID").val();
         for (let i = 0; i < customerDB.length; i++) {
             if (customerDB[i].getCustomerID() == customerId) {
                 customerDB.splice(i, 1);
@@ -138,13 +156,31 @@ function cusDelete() {
         }
         addCustomerData();
         clearFileld();
-        generateCusId();
+        generateCusId();*/
     });
 }
 
 /*customer Update*/
 $("#btnCustomerUpdate").click(function () {
-    let customerId = $("#txtCusID").val();
+
+    var cusOb = {
+        id: $("#txtCusID").val(),
+        name: $("#txtCusName").val(),
+        address: $("#txtCusAddress").val(),
+        salary: $("#txtCusTP").val()
+    }
+    $.ajax({
+        url: "http://localhost:8080/backEnd/customer", method: "PUT", // contentType: "application/json",
+        data: JSON.stringify(cusOb), success: function (resp) {
+            if (resp.status == 200) {
+                addCustomerData();
+                clearFileld();
+            } else if (resp.status == 400) {
+                alert(resp.data);
+            }
+        }
+    })
+  /*  let customerId = $("#txtCusID").val();
     let customerName = $("#txtCusName").val();
     let customerAddress = $("#txtCusAddress").val();
     let customerTelNumber = $("#txtCusTP").val();
@@ -157,7 +193,7 @@ $("#btnCustomerUpdate").click(function () {
         }
     }
     addCustomerData();
-    generateCusId();
+    generateCusId();*/
 });
 
 /*Customer ID auto generate*/

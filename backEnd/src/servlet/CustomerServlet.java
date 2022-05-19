@@ -1,9 +1,7 @@
 package servlet;
 
 import javax.annotation.Resource;
-import javax.json.Json;
-import javax.json.JsonArrayBuilder;
-import javax.json.JsonObjectBuilder;
+import javax.json.*;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -138,6 +136,90 @@ public class CustomerServlet extends HttpServlet {
         }
     }
 
+    @Override
+    protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        resp.setContentType("application/json");
+        String cusID = req.getParameter("cusID");
+        JsonObjectBuilder dataMsgBuilder = Json.createObjectBuilder();
+        PrintWriter writer = resp.getWriter();
 
+        Connection connection = null;
+
+        try {
+            connection = ds.getConnection();
+            PreparedStatement pstm = connection.prepareStatement("DELETE FROM customer WHERE id=?");
+            pstm.setObject(1,cusID);
+
+            if (pstm.executeUpdate()>0){
+                resp.setStatus(HttpServletResponse.SC_OK);
+                dataMsgBuilder.add("data","");
+                dataMsgBuilder.add("massage","Customer Deleted");
+                dataMsgBuilder.add("status","200");
+                writer.print(dataMsgBuilder);
+            }
+        } catch (SQLException throwables) {
+            dataMsgBuilder.add("status",400);
+            dataMsgBuilder.add("massage","Error");
+            dataMsgBuilder.add("data", throwables.getLocalizedMessage());
+            writer.print(dataMsgBuilder.build());
+            resp.setStatus(HttpServletResponse.SC_OK);
+        }finally {
+            try {
+                connection.close();
+            } catch (SQLException throwables) {
+                throwables.printStackTrace();
+            }
+        }
+
+    }
+
+    @Override
+    protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        resp.setContentType("application/json");
+
+        //we have to get updated data from JSON format
+        JsonReader reader = Json.createReader(req.getReader());
+        JsonObject jsonObject = reader.readObject();
+
+        String cusIDUpdate = jsonObject.getString("id");
+        String cusNameUpdate = jsonObject.getString("name");
+        String cusAddressUpdate = jsonObject.getString("address");
+        String cusSalaryUpdate = jsonObject.getString("salary");
+        PrintWriter writer = resp.getWriter();
+        System.out.println(cusIDUpdate + " " + cusAddressUpdate + " " + cusSalaryUpdate + " " + cusNameUpdate);
+
+        Connection connection = null;
+        try {
+            connection = ds.getConnection();
+            PreparedStatement pstm = connection.prepareStatement("UPDATE customer SET name=?, address=?, salary=? WHERE id=?");
+            pstm.setObject(1, cusNameUpdate);
+            pstm.setObject(2, cusAddressUpdate);
+            pstm.setObject(3, cusSalaryUpdate);
+            pstm.setObject(4, cusIDUpdate);
+
+            if (pstm.executeUpdate() > 0) {
+                JsonObjectBuilder response = Json.createObjectBuilder();
+                resp.setStatus(HttpServletResponse.SC_CREATED);//201
+                response.add("status", 200);
+                response.add("message", "Successfully Updated");
+                response.add("data", "");
+                writer.print(response.build());
+            }
+
+        } catch (SQLException e) {
+            JsonObjectBuilder response = Json.createObjectBuilder();
+            response.add("status", 400);
+            response.add("message", "Error");
+            response.add("data", e.getLocalizedMessage());
+            writer.print(response.build());
+            resp.setStatus(HttpServletResponse.SC_OK); //200
+        } finally {
+            try {
+                connection.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
 }
 
