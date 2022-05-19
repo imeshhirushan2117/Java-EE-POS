@@ -23,7 +23,7 @@ public class CustomerServlet extends HttpServlet {
     DataSource ds;
 
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException{
         resp.setContentType("application/json");
         JsonArrayBuilder arrayBuilder = Json.createArrayBuilder();
         JsonObjectBuilder objectBuilder = Json.createObjectBuilder();
@@ -60,8 +60,29 @@ public class CustomerServlet extends HttpServlet {
 
                     writer.print(dataMsgBuilder.build());
                     break;
-
+                case "GenId":
+//                    resp.addHeader("Access-Control-Allow-Origin","*");
+                    ResultSet rst = connection.prepareStatement("SELECT id FROM customer ORDER BY id DESC LIMIT 1").executeQuery();
+                    if (rst.next()) {
+                        int tempId = Integer.parseInt(rst.getString(1).split("-")[1]);
+                        tempId += 1;
+                        if (tempId < 10) {
+                            objectBuilder.add("id", "C00-00" + tempId);
+                        } else if (tempId < 100) {
+                            objectBuilder.add("id", "C00-0" + tempId);
+                        } else if (tempId < 1000) {
+                            objectBuilder.add("id", "C00-" + tempId);
+                        }
+                    } else {
+                        objectBuilder.add("id", "C00-001");
+                    }
+                    dataMsgBuilder.add("data",objectBuilder.build());
+                    dataMsgBuilder.add("massage","Done");
+                    dataMsgBuilder.add("status",200);
+                    writer.print(dataMsgBuilder.build());
+                    break;
             }
+
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         } finally {
@@ -116,5 +137,7 @@ public class CustomerServlet extends HttpServlet {
             }
         }
     }
+
+
 }
 
