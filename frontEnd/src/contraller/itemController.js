@@ -1,8 +1,29 @@
 /*===============Item party===============*/
 generateId();
+addItemData();
 /*addItem*/
 $("#btnItemAdd").click(function () {
-    let itemId = $("#txtItemID").val();
+    $.ajax({
+        url: "http://localhost:8080/backEnd/item",
+        method: "POST",
+        data: $("#itemForm").serialize(),
+        success: function (resp) {
+            if (resp.status == 200) {
+                clearFileldItem();
+                addItemData();
+                generateId();
+                loadAllItemIds();
+            } else {
+                alert(resp.data)
+            }
+        }, error: function (ob, textStatus, error) {
+            console.log(ob);
+            console.log(textStatus);
+            console.log(error);
+        }
+    });
+
+    /*let itemId = $("#txtItemID").val();
     let itemName = $("#txtItemName").val();
     let itemQty = $("#txtItemQty").val();
     let itemPrice = $("#txtItemPrice").val();
@@ -27,26 +48,43 @@ function bindItemRow(){
         $("#txtItemName").val(itemName);
         $("#txtItemQty").val(itemQty);
         $("#txtItemPrice").val(itemPrice);
-    });
-}
+    });*/
+});
+
 /*table load*/
 function addItemData() {
+
     $("#tbodyItem").empty();
+    $.ajax({
+        url: "http://localhost:8080/backEnd/item?option=GetAll",
+        method: "GET",
+        success:function (rest){
+            for (const item of rest.data){
+                let raw = `<tr><td>${item.itemId}</td><td>${item.itemName}</td><td>${item.itemQty}</td><td>${item.itemPrice}</td></tr>`
+                $("#tbodyItem").append(raw);
+                itemDelete();
+            }
+        }
+    })
+
+    /*$("#tbodyItem").empty();
     for (var i of itemDB) {
         let raw = `<tr><td>${i.getItemID()}</td><td>${i.getItemName()}</td><td>${i.getItemQty()}</td><td>${i.getItemPrice()}</td></tr>`
         $("#tblItem").append(raw);
         bindItemRow();
         itemDelete();
-    }
+    }*/
 }
 
 /*btnClear*/
 $("#btnItemClear").click(function () {
     clearFileldItem();
 });
+
 function clearFileldItem() {
     $("#txtItemID,#txtItemName,#txtItemQty,#txtItemPrice").val("");
 }
+
 /*textFeeldsForcasing*/
 $("#txtItemID").keydown(function (event) {
     if (event.key == "Enter") {
@@ -78,6 +116,7 @@ $("#btnItemSearch").click(function () {
         clearFileld();
     }
 });
+
 function searchItem(id) {
     for (let i = 0; i < itemDB.length; i++) {
         if (itemDB[i].getItemID() == id) {
@@ -90,9 +129,9 @@ function searchItem(id) {
 function itemDelete() {
     $("#btnItemDelete").click(function () {
         let itemId = $("#txtItemID").val();
-        for (let i =0;i<itemDB.length;i++){
-            if (itemDB[i].getItemID()==itemId){
-                itemDB.splice(i,1);
+        for (let i = 0; i < itemDB.length; i++) {
+            if (itemDB[i].getItemID() == itemId) {
+                itemDB.splice(i, 1);
             }
         }
         addItemData()
@@ -110,7 +149,7 @@ $("#btnItemUpdate").click(function () {
     let itemPrice = $("#txtItemPrice").val();
 
     for (var i = 0; i < itemDB.length; i++) {
-        if(itemDB[i].getItemID()==itemId){
+        if (itemDB[i].getItemID() == itemId) {
             itemDB[i].setItemName(itemName);
             itemDB[i].setItemQty(itemQty);
             itemDB[i].setItemPrice(itemPrice);

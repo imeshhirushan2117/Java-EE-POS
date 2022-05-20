@@ -66,22 +66,26 @@
 
             </div>
             <div class="row">
-                <div class="mb-3 col-6">
-                    <label class="form-label" for="txtItemID">Item ID</label>
-                    <input class="form-control" id="txtItemID" placeholder="Item ID" type="text">
-                </div>
-                <div class="mb-3 col-6">
-                    <label class="form-label" for="txtItemName">Item Name</label>
-                    <input class="form-control" id="txtItemName" placeholder="Item Name" type="text">
-                </div>
-                <div class="mb-3 col-6">
-                    <label class="form-label" for="txtItemQty">Item Qty</label>
-                    <input class="form-control" id="txtItemQty" placeholder="Item Qty" type="text">
-                </div>
-                <div class="mb-3 col-6">
-                    <label class="form-label" for="txtItemPrice">Item Price</label>
-                    <input class="form-control" id="txtItemPrice" placeholder="Item Price" type="text">
-                </div>
+                <form id="itemForm">
+                    <div class="mb-3 col-6">
+                        <label class="form-label" for="txtItemID">Item ID</label>
+                        <input class="form-control" id="txtItemID" name="itemId" placeholder="Item ID" type="text">
+                    </div>
+                    <div class="mb-3 col-6">
+                        <label class="form-label" for="txtItemName">Item Name</label>
+                        <input class="form-control" id="txtItemName" name="itemName" placeholder="Item Name"
+                               type="text">
+                    </div>
+                    <div class="mb-3 col-6">
+                        <label class="form-label" for="txtItemQty">Item Qty</label>
+                        <input class="form-control" id="txtItemQty" name="itemQty" placeholder="Item Qty" type="text">
+                    </div>
+                    <div class="mb-3 col-6">
+                        <label class="form-label" for="txtItemPrice">Item Price</label>
+                        <input class="form-control" id="txtItemPrice" name="itemPrice" placeholder="Item Price"
+                               type="text">
+                    </div>
+                </form>
             </div>
             <div class="row align-items-center pt-3 ">
                 <div class="col-12 mt-2">
@@ -89,10 +93,10 @@
                         <table class="table table-success table-striped" id="tblItem">
                             <thead>
                             <tr>
-                                <th scope="col">Item ID</th>
-                                <th scope="col">Item Name</th>
-                                <th scope="col">Item Qty</th>
-                                <th scope="col">Item Price</th>
+                                <th>Item ID</th>
+                                <th>Item Name</th>
+                                <th>Item Qty</th>
+                                <th>Item Price</th>
                             </tr>
                             </thead>
                             <tbody id="tbodyItem">
@@ -138,19 +142,22 @@
                 <form id="customerForm">
                     <div class="mb-3 col-6">
                         <label class="form-label" for="txtCusID">Customer ID</label>
-                        <input class="form-control" id="txtCusID" placeholder="Customer ID" type="text" name="cusID">
+                        <input class="form-control" id="txtCusID" name="cusID" placeholder="Customer ID" type="text">
                     </div>
                     <div class="mb-3 col-6">
                         <label class="form-label" for="txtCusName">Customer Name</label>
-                        <input class="form-control" id="txtCusName" placeholder="Customer Name" type="text" name="cusName">
+                        <input class="form-control" id="txtCusName" name="cusName" placeholder="Customer Name"
+                               type="text">
                     </div>
                     <div class="mb-3 col-6">
                         <label class="form-label" for="txtCusAddress">Customer Address</label>
-                        <input class="form-control" id="txtCusAddress" placeholder="Customer Address" type="text" name="cusAddressA">
+                        <input class="form-control" id="txtCusAddress" name="cusAddressA" placeholder="Customer Address"
+                               type="text">
                     </div>
                     <div class="mb-3 col-6">
                         <label class="form-label" for="txtCusTP">Customer Salary</label>
-                        <input class="form-control" id="txtCusTP" placeholder="Customer Salary" type="text" name="cusSalary">
+                        <input class="form-control" id="txtCusTP" name="cusSalary" placeholder="Customer Salary"
+                               type="text">
                     </div>
                 </form>
             </div>
