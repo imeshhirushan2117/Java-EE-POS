@@ -2,8 +2,7 @@
 generateCusId();
 addCustomerData();
 clearFileld();
-/*cusDelete();*/
-/*customerAdd*/
+
 $("#btnCustomerAdd").click(function () {
     $.ajax({
         url: "http://localhost:8080/backEnd/customer",
@@ -14,9 +13,6 @@ $("#btnCustomerAdd").click(function () {
                 addCustomerData();
                 generateCusId();
                 clearFileld();
-                /* clearFileld();
-                 addCustomerData();
-                 generateCusId();*/
             } else {
                 alert(resp.data)
             }
@@ -27,20 +23,6 @@ $("#btnCustomerAdd").click(function () {
             console.log("error");
         }
     });
-
-    /* let customerId = $("#txtCusID").val();
-     let customerName = $("#txtCusName").val();
-     let customerAddress = $("#txtCusAddress").val();
-     let customerTelNumber = $("#txtCusTP").val();
-
-
-     var customerOB = new CustomerDTO(customerId, customerName, customerAddress, customerTelNumber);
-
-     customerDB.push(customerOB);
-     clearFileld();
-     addCustomerData();
-     generateCusId();
-     loadAllCustomerIds();*/
 });
 
 function bindCustomerRow() {

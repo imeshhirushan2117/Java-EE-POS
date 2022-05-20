@@ -12,7 +12,9 @@ $("#btnItemAdd").click(function () {
                 clearFileldItem();
                 addItemData();
                 generateId();
+                bindItemRow();
                 loadAllItemIds();
+
             } else {
                 alert(resp.data)
             }
@@ -58,10 +60,11 @@ function addItemData() {
     $.ajax({
         url: "http://localhost:8080/backEnd/item?option=GetAll",
         method: "GET",
-        success:function (rest){
-            for (const item of rest.data){
+        success: function (rest) {
+            for (const item of rest.data) {
                 let raw = `<tr><td>${item.itemId}</td><td>${item.itemName}</td><td>${item.itemQty}</td><td>${item.itemPrice}</td></tr>`
                 $("#tbodyItem").append(raw);
+                bindItemRow();
                 itemDelete();
             }
         }
@@ -126,38 +129,64 @@ function searchItem(id) {
 }
 
 /*item Delete*/
-function itemDelete() {
-    $("#btnItemDelete").click(function () {
-        let itemId = $("#txtItemID").val();
-        for (let i = 0; i < itemDB.length; i++) {
-            if (itemDB[i].getItemID() == itemId) {
-                itemDB.splice(i, 1);
+function itemDelete(){
+    let getClickData = $("#txtItemID").val();
+    $.ajax({
+        url: `http://localhost:8080/backEnd/item?txtCusID=${getClickData}`,
+        method: "DELETE",
+        success: function (resp) {
+            if (resp.status == 200) {
+                addCustomerData();
+                clearFileld();
+            } else {
+                alert(resp.data);
             }
         }
-        addItemData()
-        clearFileldItem();
-        generateId();
     });
 }
+
+    $("#btnItemDelete").click(function () {
+        itemDelete();
+        clearFileld();
+    });
+
 
 
 /*Item Update*/
 $("#btnItemUpdate").click(function () {
-    let itemId = $("#txtItemID").val();
-    let itemName = $("#txtItemName").val();
-    let itemQty = $("#txtItemQty").val();
-    let itemPrice = $("#txtItemPrice").val();
-
-    for (var i = 0; i < itemDB.length; i++) {
-        if (itemDB[i].getItemID() == itemId) {
-            itemDB[i].setItemName(itemName);
-            itemDB[i].setItemQty(itemQty);
-            itemDB[i].setItemPrice(itemPrice);
-        }
+    var itemOb = {
+        itemId: $("#txtItemID").val(),
+        itemName: $("#txtItemName").val(),
+        itemQty: $("#txtItemQty").val(),
+        itemSalary: $("#txtItemPrice").val()
     }
-    addItemData();
-    generateId();
-    clearFileldItem();
+    $.ajax({
+        url: "http://localhost:8080/backEnd/item", method: "PUT", // contentType: "application/json",
+        data: JSON.stringify(itemOb), success: function (resp) {
+            if (resp.status == 200) {
+                addItemData();
+                clearFileldItem();
+            } else {
+                alert(resp.data);
+            }
+        }
+    })
+
+    /* let itemId = $("#txtItemID").val();
+     let itemName = $("#txtItemName").val();
+     let itemQty = $("#txtItemQty").val();
+     let itemPrice = $("#txtItemPrice").val();
+
+     for (var i = 0; i < itemDB.length; i++) {
+         if (itemDB[i].getItemID() == itemId) {
+             itemDB[i].setItemName(itemName);
+             itemDB[i].setItemQty(itemQty);
+             itemDB[i].setItemPrice(itemPrice);
+         }
+     }
+     addItemData();
+     generateId();
+     clearFileldItem();*/
 });
 
 /*Item ID auto generate*/
@@ -165,10 +194,10 @@ function generateId() {
     $.ajax({
         url: "http://localhost:8080/backEnd/item?option=GenId",
         method: "GET",
-        success:function (resp){
-            if(resp.status==200){
+        success: function (resp) {
+            if (resp.status == 200) {
                 $("#txtItemID").val(resp.data.code);
-            }else{
+            } else {
                 alert(resp.data);
             }
         }
@@ -192,4 +221,18 @@ function generateId() {
     } else {
         $("#txtItemID").val("I00-" + temp);
     }*/
+}
+
+function bindItemRow() {
+    $("#tbodyItem>tr").click(function () {
+        let itemId = $(this).children(":eq(0)").text();
+        let itemName = $(this).children(":eq(1)").text();
+        let itemQty = $(this).children(":eq(2)").text();
+        let itmPrice = $(this).children(":eq(3)").text();
+
+        $("#txtItemID").val(itemId);
+        $("#txtItemName").val(itemName);
+        $("#txtItemQty").val(itemQty);
+        $("#txtItemPrice").val(itmPrice);
+    });
 }

@@ -1,9 +1,7 @@
 package servlet;
 
 import javax.annotation.Resource;
-import javax.json.Json;
-import javax.json.JsonArrayBuilder;
-import javax.json.JsonObjectBuilder;
+import javax.json.*;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -130,6 +128,90 @@ public class ItemServlet extends HttpServlet {
             objectBuilder.add("message", "Error");
             objectBuilder.add("data", throwables.getLocalizedMessage());
         } finally {
+            try {
+                connection.close();
+            } catch (SQLException throwables) {
+                throwables.printStackTrace();
+            }
+        }
+    }
+
+    @Override
+    protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        resp.setContentType("application/json");
+        JsonReader reader = Json.createReader(req.getReader());
+        JsonObject jsonObject = reader.readObject();
+
+        String itemIDUpdate = jsonObject.getString("itemId");
+        String itemNameUpdate = jsonObject.getString("itemName");
+        String itemQtyUpdate = jsonObject.getString("itemQty");
+        String itemPriceUpdate = jsonObject.getString("itemPrice");
+        PrintWriter writer = resp.getWriter();
+        System.out.println(itemIDUpdate + " " + itemNameUpdate + " " + itemQtyUpdate + " " + itemPriceUpdate);
+
+        Connection connection = null;
+        try {
+            connection= ds.getConnection();
+            PreparedStatement pstm = connection.prepareStatement("UPDATE item SET description=?, qtyOnHand=?, unitPrice=? WHERE code=?");
+            pstm.setObject(1, itemNameUpdate);
+            pstm.setObject(2, itemQtyUpdate);
+            pstm.setObject(3, itemPriceUpdate);
+            pstm.setObject(4, itemIDUpdate);
+
+            if(pstm.executeUpdate()>0){
+                JsonObjectBuilder respones = Json.createObjectBuilder();
+                resp.setStatus(HttpServletResponse.SC_CREATED);
+                respones.add("ststus",200);
+                respones.add("message", "Successfully Updated");
+                respones.add("data", "");
+                writer.print(respones.build());
+            }
+
+        } catch (SQLException throwables) {
+            JsonObjectBuilder response = Json.createObjectBuilder();
+            response.add("status", 400);
+            response.add("message", "Error");
+            response.add("data", throwables.getLocalizedMessage());
+            writer.print(response.build());
+            resp.setStatus(HttpServletResponse.SC_OK); //200
+        }finally {
+            try {
+                connection.close();
+            } catch (SQLException throwables) {
+                throwables.printStackTrace();
+            }
+        }
+
+
+    }
+
+    @Override
+    protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        resp.setContentType("application/json");
+        String itemID = req.getParameter("txtItemId");
+        JsonObjectBuilder dataMsgBuilder = Json.createObjectBuilder();
+        PrintWriter writer = resp.getWriter();
+
+        Connection connection = null;
+        try {
+            connection = ds.getConnection();
+            PreparedStatement pstm = connection.prepareStatement("DELETE FROM item WHERE code=?");
+            pstm.setObject(1,itemID);
+
+            if (pstm.executeUpdate()>0){
+                resp.setStatus(HttpServletResponse.SC_OK);
+                dataMsgBuilder.add("data","");
+                dataMsgBuilder.add("massage","Item Deleted");
+                dataMsgBuilder.add("status","200");
+                writer.print(dataMsgBuilder.build());
+            }
+        } catch (SQLException throwables) {
+            dataMsgBuilder.add("status",400);
+            dataMsgBuilder.add("massage","Error");
+            dataMsgBuilder.add("data", throwables.getLocalizedMessage());
+            writer.print(dataMsgBuilder.build());
+            resp.setStatus(HttpServletResponse.SC_OK);
+        }finally {
             try {
                 connection.close();
             } catch (SQLException throwables) {
