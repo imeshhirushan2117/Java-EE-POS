@@ -162,7 +162,19 @@ $("#btnItemUpdate").click(function () {
 
 /*Item ID auto generate*/
 function generateId() {
-    let index = itemDB.length - 1;
+    $.ajax({
+        url: "http://localhost:8080/backEnd/item?option=GenId",
+        method: "GET",
+        success:function (resp){
+            if(resp.status==200){
+                $("#txtItemID").val(resp.data.code);
+            }else{
+                alert(resp.data);
+            }
+        }
+    });
+
+    /*let index = itemDB.length - 1;
     let id;
     let temp;
     if (index != -1) {
@@ -179,5 +191,5 @@ function generateId() {
         $("#txtItemID").val("I00-0" + temp);
     } else {
         $("#txtItemID").val("I00-" + temp);
-    }
+    }*/
 }
