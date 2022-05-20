@@ -13,6 +13,7 @@ import javax.sql.DataSource;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
@@ -65,6 +66,50 @@ public class ItemServlet extends HttpServlet {
             throwables.printStackTrace();
         }
         finally {
+            try {
+                connection.close();
+            } catch (SQLException throwables) {
+                throwables.printStackTrace();
+            }
+        }
+    }
+
+    @Override
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        resp.setContentType("application/json");
+        String itemId = req.getParameter("itemId");
+        String itemName = req.getParameter("itemName");
+        String itemQty= req.getParameter("itemQty");
+        String itemPrice = req.getParameter("itemPrice");
+
+        PrintWriter writer = resp.getWriter();
+        Connection connection = null;
+        try {
+            connection  = ds.getConnection();
+            PreparedStatement pstm = connection.prepareStatement("INSERT INTO item VALUES(?,?,?,?)");
+            pstm.setObject(1,itemId);
+            pstm.setObject(2,itemName);
+            pstm.setObject(3,itemQty);
+            pstm.setObject(4,itemPrice);
+
+            if(pstm.executeUpdate()>0){
+                JsonObjectBuilder objectBuilder = Json.createObjectBuilder();
+                resp.setStatus(HttpServletResponse.SC_CREATED);
+                objectBuilder.add("status",200);
+                objectBuilder.add("message","Item Add Success");
+                objectBuilder.add("data","");
+                writer.print(objectBuilder.build());
+            }
+
+
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+            JsonObjectBuilder objectBuilder = Json.createObjectBuilder();
+            resp.setStatus(HttpServletResponse.SC_OK);
+            objectBuilder.add("status",400);
+            objectBuilder.add("message","Error");
+            objectBuilder.add("data",throwables.getLocalizedMessage());
+        }finally {
             try {
                 connection.close();
             } catch (SQLException throwables) {
