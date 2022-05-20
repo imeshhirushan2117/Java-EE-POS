@@ -115,7 +115,6 @@ function serchCustomer(id) {
 $("#btnCustomerDelete").click(function () {
     cusDelete() ;
 });
-/*customer delete*/
 function cusDelete(){
 
     let getClickData = $("#txtCusID").val();

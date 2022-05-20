@@ -66,6 +66,7 @@ function addItemData() {
                 $("#tbodyItem").append(raw);
                 bindItemRow();
                 itemDelete();
+                clearFileld();
             }
         }
     })
@@ -85,7 +86,7 @@ $("#btnItemClear").click(function () {
 });
 
 function clearFileldItem() {
-    $("#txtItemID,#txtItemName,#txtItemQty,#txtItemPrice").val("");
+    $("#txtItemName,#txtItemQty,#txtItemPrice").val("");
 }
 
 /*textFeeldsForcasing*/
@@ -128,15 +129,19 @@ function searchItem(id) {
     }
 }
 
-/*item Delete*/
+$("#btnItemDelete").click(function () {
+    itemDelete();
+    clearFileldItem();
+
+});
 function itemDelete(){
-    let getClickData = $("#txtItemID").val();
+    var getClickData = $("#txtItemID").val();
     $.ajax({
-        url: `http://localhost:8080/backEnd/item?txtCusID=${getClickData}`,
+        url: `http://localhost:8080/backEnd/item?txtItemId=${getClickData}`,
         method: "DELETE",
         success: function (resp) {
             if (resp.status == 200) {
-                addCustomerData();
+                addItemData();
                 clearFileld();
             } else {
                 alert(resp.data);
@@ -145,20 +150,13 @@ function itemDelete(){
     });
 }
 
-    $("#btnItemDelete").click(function () {
-        itemDelete();
-        clearFileld();
-    });
-
-
-
 /*Item Update*/
 $("#btnItemUpdate").click(function () {
     var itemOb = {
         itemId: $("#txtItemID").val(),
         itemName: $("#txtItemName").val(),
         itemQty: $("#txtItemQty").val(),
-        itemSalary: $("#txtItemPrice").val()
+        itemPrice: $("#txtItemPrice").val()
     }
     $.ajax({
         url: "http://localhost:8080/backEnd/item", method: "PUT", // contentType: "application/json",
@@ -166,6 +164,7 @@ $("#btnItemUpdate").click(function () {
             if (resp.status == 200) {
                 addItemData();
                 clearFileldItem();
+
             } else {
                 alert(resp.data);
             }
