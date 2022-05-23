@@ -13,6 +13,7 @@ $("#btnCustomerAdd").click(function () {
                 addCustomerData();
                 generateCusId();
                 clearFileld();
+                loadAllCustomerIds();
             } else {
                 alert(resp.data)
             }
