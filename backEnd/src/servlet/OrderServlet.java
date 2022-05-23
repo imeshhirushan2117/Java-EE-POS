@@ -53,7 +53,21 @@ public class OrderServlet extends HttpServlet {
                     dataMsgBuilder.add("status", 200);
                     writer.print(dataMsgBuilder.build());
                     break;
+
+                case "cmb_load_item_id":
+                    rst = connection.prepareStatement("SELECT code FROM item").executeQuery();
+                    while (rst.next()) {
+                        String id = rst.getString(1);
+                        objectBuilder.add("id", id);
+                        arrayBuilder.add(objectBuilder.build());
+                    }
+                    dataMsgBuilder.add("data", arrayBuilder.build());
+                    dataMsgBuilder.add("message", "Done");
+                    dataMsgBuilder.add("status", 200);
+                    writer.print(dataMsgBuilder.build());
+                    break;
             }
+
 
 
         } catch (SQLException throwables) {
@@ -71,4 +85,6 @@ public class OrderServlet extends HttpServlet {
             }
         }
     }
+
+
 }
