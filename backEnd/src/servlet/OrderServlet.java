@@ -87,6 +87,26 @@ public class OrderServlet extends HttpServlet {
                     dataMsgBuilder.add("status", 200);
                     writer.print(dataMsgBuilder.build());
                     break;
+
+                case "SelectedItem":
+                    String itemId = req.getParameter("itemId");
+                    pstm = connection.prepareStatement("SELECT * FROM item WHERE code=?");
+                    pstm.setObject(1, itemId);
+                    rst = pstm.executeQuery();
+                    if (rst.next()) {
+                        String itemName = rst.getString(2);
+                        String itemQty = rst.getString(3);
+                        String itemPrice = rst.getString(4);
+                        objectBuilder.add("itemName", itemName);
+                        objectBuilder.add("itemQty", itemQty);
+                        objectBuilder.add("itemPrice", itemPrice);
+                        arrayBuilder.add(objectBuilder.build());
+                    }
+                    dataMsgBuilder.add("data", arrayBuilder.build());
+                    dataMsgBuilder.add("message", "Done");
+                    dataMsgBuilder.add("status", 200);
+                    writer.print(dataMsgBuilder.build());
+                    break;
             }
 
 
