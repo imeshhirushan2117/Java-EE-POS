@@ -19,6 +19,8 @@ $("#idCmbItem").change(function (e){
 /* load customer ids to cmb (customer)*/
 function loadAllCustomerIds() {
     $("#idCmbOrder").empty();
+    let cusHint = `<option disabled selected>Select Customer ID</option>`;
+    $("#idCmbOrder").append(cusHint);
     $.ajax({
         url: "http://localhost:8080/backEnd/order?option=cmb_load_cus_id",
         method: "GET",
@@ -46,14 +48,29 @@ function loadAllCustomerIds() {
 }
 /*load customer data to text fields*/
 function selectedCustomer(CustomerId){
-    for (const i in customerDB){
+    $.ajax({
+        url: `http://localhost:8080/backEnd/order?option=SelectedCus&cusId=${CustomerId}`,
+        method: "GET",
+        success:function (resp){
+            if (resp.status==200){
+                for (const customer of resp.data) {
+                    $("#cusName").val(customer.cusName);
+                    $("#address").val(customer.cusAddress);
+                    $("#tepNumber").val(customer.cusSalary);
+                }
+            }else{
+                alert(resp.data)
+            }
+        }
+    })
+    /*for (const i in customerDB){
         if (customerDB[i].getCustomerID()==CustomerId) {
             let element = customerDB[i];
             $("#cusName").val(element.getCustomerName());
             $("#address").val(element.getCustomerAddress());
             $("#tepNumber").val(element.getCustomerTelNumber());
         }
-    }
+    }*/
 }
 
 /* load item ids to cmb (item)*/

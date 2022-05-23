@@ -34,7 +34,7 @@ public class OrderServlet extends HttpServlet {
         Connection connection = null;
 
         try {
-           connection = ds.getConnection();
+            connection = ds.getConnection();
             ResultSet rst;
             PreparedStatement pstm;
 
@@ -66,18 +66,37 @@ public class OrderServlet extends HttpServlet {
                     dataMsgBuilder.add("status", 200);
                     writer.print(dataMsgBuilder.build());
                     break;
-            }
 
+
+                case "SelectedCus":
+                    String cusId = req.getParameter("cusId");
+                    pstm = connection.prepareStatement("SELECT * FROM customer WHERE id=?");
+                    pstm.setObject(1, cusId);
+                    rst = pstm.executeQuery();
+                    if (rst.next()) {
+                        String cusName = rst.getString(2);
+                        String cusAddress = rst.getString(3);
+                        String cusSalary = rst.getString(4);
+                        objectBuilder.add("cusName", cusName);
+                        objectBuilder.add("cusAddress", cusAddress);
+                        objectBuilder.add("cusSalary", cusSalary);
+                        arrayBuilder.add(objectBuilder.build());
+                    }
+                    dataMsgBuilder.add("data", arrayBuilder.build());
+                    dataMsgBuilder.add("message", "Done");
+                    dataMsgBuilder.add("status", 200);
+                    writer.print(dataMsgBuilder.build());
+                    break;
+            }
 
 
         } catch (SQLException throwables) {
             throwables.printStackTrace();
-            dataMsgBuilder.add("data",throwables.getLocalizedMessage());
+            dataMsgBuilder.add("data", throwables.getLocalizedMessage());
             dataMsgBuilder.add("message", "Error");
             dataMsgBuilder.add("status", 400);
             writer.print(dataMsgBuilder.build());
-        }
-        finally {
+        } finally {
             try {
                 connection.close();
             } catch (SQLException throwables) {
@@ -85,6 +104,5 @@ public class OrderServlet extends HttpServlet {
             }
         }
     }
-
 
 }
