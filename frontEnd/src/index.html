@@ -277,7 +277,7 @@
                                 </div>
                             </div>
                             <div class="row mt-3 mb-1">
-                                <button class="btn btn-primary" style="background-color: #4AC29A" type="button">Add
+                                <button id="btnAddCad" class="btn btn-primary" style="background-color: #4AC29A" type="button">Add
                                     Item
                                 </button>
                             </div>
@@ -294,6 +294,7 @@
                                 <div class="col">
                                     <p class="h2 d-inline">
                                         Total :
+                                        <h1 id="lblFullTotal"></h1>
                                     </p>
                                     <p class="h2 d-inline">
                                         <!-- 2000 LKR-->
@@ -304,6 +305,7 @@
                                 <div class="col">
                                     <p class="h2 d-inline">
                                         SubTotal :
+                                    <h1 id="subTotal"></h1>
                                     </p>
                                     <p class="h2 d-inline">
                                         <!--1800 LKR-->
@@ -329,7 +331,7 @@
                                 </div>
                             </div>
                             <div class="row mt-3 mb-1">
-                                <button class="btn btn-success" type="button">Purchase</button>
+                                <button class="btn btn-success"  id="purchaseBtn" type="button">Purchase</button>
                             </div>
                         </div>
                     </div>
@@ -348,7 +350,7 @@
                         <th>Total</th>
                     </tr>
                     </thead>
-                    <tbody>
+                    <tbody id="orderTbody">
 
                     </tbody>
                 </table>

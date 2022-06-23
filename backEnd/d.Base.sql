@@ -44,3 +44,10 @@ CREATE TABLE `orderdetails` (
 
 SHOW DATABASES;
 SHOW TABLES;
+
+ALTER TABLE orderdetails
+    -> ADD total double;
+
+ALTER TABLE orders ADD discount int;
+ALTER TABLE orders ADD total double;
+ALTER TABLE orders ADD subtotal double;
