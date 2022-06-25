@@ -10,10 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.sql.DataSource;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 
 @WebServlet(urlPatterns = "/order")
 public class OrderServlet extends HttpServlet {
@@ -107,6 +104,28 @@ public class OrderServlet extends HttpServlet {
                     dataMsgBuilder.add("status", 200);
                     writer.print(dataMsgBuilder.build());
                     break;
+
+                case "GenOrderId":
+                    rst = connection.prepareStatement("SELECT oid FROM orders ORDER BY oid DESC LIMIT 1").executeQuery();
+                    if (rst.next()) {
+                        int tempId = Integer.parseInt(rst.getString(1).split("-")[1]);
+                        tempId += 1;
+                        if (tempId < 10) {
+                            objectBuilder.add("oid", "O00-00" + tempId);
+                        } else if (tempId < 100) {
+                            objectBuilder.add("oid", "O00-0" + tempId);
+                        } else if (tempId < 1000) {
+                            objectBuilder.add("oid", "O00-" + tempId);
+                        }
+                    } else {
+                        objectBuilder.add("oid", "O00-001");
+                    }
+                    dataMsgBuilder.add("data", objectBuilder.build());
+                    dataMsgBuilder.add("message", "Done");
+                    dataMsgBuilder.add("status", 200);
+                    writer.print(dataMsgBuilder.build());
+                    break;
+
             }
 
 
@@ -169,6 +188,8 @@ public class OrderServlet extends HttpServlet {
             pstm.setObject(5, order.getString("total"));
             pstm.setObject(6, order.getString("subTotal"));
 
+            System.out.println(order);
+
             if (pstm.executeUpdate() > 0) {
                 if (saveOrderDetails(order.getString("orderId"), orderDetail)) {
                     connection.commit();
@@ -207,7 +228,7 @@ public class OrderServlet extends HttpServlet {
             pstm.setObject(3, orderDetailJsonObj.getString("itemQty"));
             pstm.setObject(4, orderDetailJsonObj.getString("itemPrice"));
             pstm.setObject(5, orderDetailJsonObj.getString("itemTotal"));
-            
+            System.out.println("PAKAYA "+orderDetailJsonObj);
 
             if (pstm.executeUpdate() > 0) {
                 if (updateItem(orderDetailJsonObj.getString("itemCode"), orderDetailJsonObj.getString("itemQty"))) {
